@@ -1,5 +1,7 @@
 body {
     font-family: "Arial";
+    background-color: #181818;
+    color: white;
 }
 
 .gameSettings {
@@ -12,7 +14,7 @@ body {
 }
 
 .gameBar {
-    background-color: gray;
+    background-color: #444444;
     display: flex;
     border: 1px solid black;
 }
@@ -22,6 +24,7 @@ body {
     width: 33%;
     justify-content: center;
     align-items: center;
+    color: white;
 }
 
 .resetButton {

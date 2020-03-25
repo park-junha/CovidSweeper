@@ -1,22 +1,31 @@
-const defaultSetting = 'beginner';
+const defaultSetting = 'intermediate';
 const defaultSize = 'medium';
 const gameSettings = {
-    'beginner': {
+    'intermediate': {
         'gridWidth': 9,
         'gridHeight': 9,
         'maxMines': 10,
+        'spreadRate': 0.15,
+        'minUninfected': 8,
+        'maxInfected': 15,
         'textSize': 'medium'
     },
-    'intermediate': {
+    'advanced': {
         'gridWidth': 16,
         'gridHeight': 16,
-        'maxMines': 40,
+        'maxMines': 30,
+        'spreadRate': 0.15,
+        'minUninfected': 12,
+        'maxInfected': 65,
         'textSize': 'small'
     },
-    'advanced': {
+    'omgwhy': {
         'gridWidth': 30,
         'gridHeight': 16,
-        'maxMines': 99,
+        'maxMines': 75,
+        'spreadRate': 0.20,
+        'minUninfected': 8,
+        'maxInfected': 150,
         'textSize': 'small'
     }
 };
@@ -48,11 +57,13 @@ const textOffsetSettings = {
 var gridWidth;
 var gridHeight;
 var maxMines;
+var maxGameMines;
 var totalTiles;
 var minesLeft;
 var tilesToClick;
 var tileSize;
 var textOffsets;
+var maxInfected;
 
 const tileBomb = -1;
 const tileDefault = 0;
@@ -66,6 +77,10 @@ let gameStarted = false;
 let gameOver = false;
 
 let timer = 0;
+
+let tileCasualties = 0;
+let playerCasualties = 0;
+let outbreaksStopped = 0;
 
 window.onload = function () {
     canv = document.getElementById("gameController");
@@ -105,6 +120,9 @@ function setDifficulty (difficulty) {
     gridWidth = gameSettings[difficulty].gridWidth;
     gridHeight = gameSettings[difficulty].gridHeight;
     maxMines = gameSettings[difficulty].maxMines;
+    spreadRate = gameSettings[difficulty].spreadRate;
+    maxInfected = gameSettings[difficulty].maxInfected;
+    minUninfected = gameSettings[difficulty].minUninfected;
     totalTiles = gridWidth * gridHeight;
 
     setTextOffsets(gameSettings[difficulty].textSize);
@@ -116,11 +134,12 @@ function resetGame () {
     gameOver = false;
     timer = 0;
     minesLeft = maxMines;
+    maxGameMines = maxMines;
     tilesToClick = totalTiles - maxMines;
-    document.getElementById("gameTimer").style.color = "black";
+    document.getElementById("gameTimer").style.color = "white";
     document.getElementById("gameTimer").innerHTML = timer;
     document.getElementById("gameEmote").innerHTML = ":-)";
-    document.getElementById("gameMines").innerHTML = minesLeft;
+    document.getElementById("gameMines").innerHTML = minesLeft + " / " + maxGameMines;
     ctx.fillStyle="black";
     ctx.fillRect(0, 0, canv.width, canv.height);
     ctx.fillStyle="grey";
@@ -134,7 +153,7 @@ function resetGame () {
 }
 
 function startGame (initX, initY) {
-    document.getElementById("gameTimer").style.color = "brown";
+    document.getElementById("gameTimer").style.color = "thistle";
     gameState = [];
     for (var row = 0; row < gridHeight; row++) {
         gameState[row] = []
@@ -161,10 +180,50 @@ function startGame (initX, initY) {
     }
 }
 
+function addNewMine () {
+    mineX = Math.floor(Math.random()*gridWidth);
+    mineY = Math.floor(Math.random()*gridHeight);
+    if (maxGameMines >= maxInfected || tilesToClick <= minUninfected) {
+        return;
+    }
+    while (gridClicked[mineY][mineX] == tileClicked || gameState[mineY][mineX] == tileBomb) {
+        mineX = Math.floor(Math.random()*gridWidth);
+        mineY = Math.floor(Math.random()*gridHeight);
+    }
+    gameState[mineY][mineX] = tileBomb;
+    tilesToClick -= 1;
+    minesLeft += 1;
+    maxGameMines += 1;
+    tileCasualties += 1;
+    document.getElementById("gameMines").innerHTML = minesLeft + " / " + maxGameMines;
+    document.getElementById("tileCasualties").innerHTML = tileCasualties + (tileCasualties == 1 ? " tile" : " tiles") + " infected with COVID-19";
+    for (var j = Math.max(mineY-1, 0); j <= Math.min(mineY+1, gridHeight-1); j++) {
+        for (var i = Math.max(mineX-1, 0); i <= Math.min(mineX+1, gridWidth-1); i++) {
+            if (gameState[j][i] != tileBomb){
+                gameState[j][i] += 1;
+                if (gridClicked[j][i] == tileClicked) {
+
+                    ctx.fillStyle="grey";
+                    ctx.fillRect(i*tileSize+1, j*tileSize+1, tileSize, tileSize);
+                    ctx.fillStyle="thistle";
+                    ctx.fillRect(i*tileSize+1, j*tileSize+1, tileSize-1, tileSize-1);
+
+                    ctx.fillStyle="indigo";
+                    ctx.fillText(gameState[j][i], i*tileSize+textOffsets.hOffset, (j+1)*tileSize+textOffsets.vOffset);
+                }
+
+            }
+        }
+    }
+}
+
 function gameTimer () {
     if (gameStarted == true && gameOver == false) {
         timer++;
         document.getElementById("gameTimer").innerHTML = timer;
+        if (Math.random() < spreadRate) {
+            addNewMine();
+        }
     }
 }
 
@@ -231,22 +290,22 @@ function markTile (x, y) {
         case tileDefault:
             break;
         case tileFlagged:
-            ctx.fillStyle="red";
+            ctx.fillStyle="indigo";
             ctx.fillText("O", x*tileSize+textOffsets.hOffsetFlag, (y+1)*tileSize+textOffsets.vOffsetFlag);
             minesLeft -= 1;
-            document.getElementById("gameMines").innerHTML = minesLeft;
+            document.getElementById("gameMines").innerHTML = minesLeft + " / " + maxGameMines;
             break;
         case tileUnsure:
             ctx.fillStyle="black";
             ctx.fillText("?", x*tileSize+textOffsets.hOffset, (y+1)*tileSize+textOffsets.vOffset);
             minesLeft += 1;
-            document.getElementById("gameMines").innerHTML = minesLeft;
+            document.getElementById("gameMines").innerHTML = minesLeft + " / " + maxGameMines;
             break;
     }
 }
 
 function checkTile (x, y) {
-    if (gridClicked[y][x] == tileFlagged) {
+    if (gridClicked[y][x] == tileFlagged || gridClicked[y][x] == tileClicked) {
         return;
     }
 
@@ -265,6 +324,7 @@ function checkTile (x, y) {
     }
     else if (gameState[y][x] < 0) {
         endGame(x, y);
+        return;
     }
     else {
         switch (gameState[y][x]) {
@@ -302,26 +362,30 @@ function checkTile (x, y) {
 
 function endGame(x, y) {
     gameOver = true;
-    document.getElementById("gameTimer").style.color = "black";
+    document.getElementById("gameTimer").style.color = "white";
     document.getElementById("gameEmote").innerHTML = "X-(";
 
-    ctx.fillStyle="brown";
+    playerCasualties += 1;
+    document.getElementById("playerCasualties").innerHTML = playerCasualties + (playerCasualties == 1 ? " player" : " players") + " infected with COVID-19";
+
+    ctx.fillStyle="purple";
     ctx.fillRect(x*tileSize+1, y*tileSize+1, tileSize, tileSize);
-    ctx.fillStyle="red";
+    ctx.fillStyle="blueviolet";
     ctx.fillRect(x*tileSize+1, y*tileSize+1, tileSize-1, tileSize-1);
     
-    ctx.fillStyle="black";
+    ctx.fillStyle="indigo";
     ctx.fillText("*", x*tileSize+textOffsets.hOffsetMine, (y+1)*tileSize+textOffsets.vOffsetMine);
 
     for (var j = 0; j < gameState.length; j++) {
         for (var i = 0; i < gameState[j].length; i++) {
             if (gameState[j][i] != tileBomb && (gridClicked[j][i] == tileFlagged || gridClicked[j][i] == tileUnsure) ) {
+                ctx.fillStyle="black";
                 ctx.fillText("X", i*tileSize+textOffsets.hOffsetX, (j+1)*tileSize+textOffsets.vOffsetX);
             }
             if (gameState[j][i] == tileBomb && gridClicked[j][i] == tileDefault && (x != i || y != j) ) {
-                ctx.fillStyle="grey";
+                ctx.fillStyle="#b19cd9";
                 ctx.fillRect(i*tileSize+1, j*tileSize+1, tileSize-1, tileSize-1);
-                ctx.fillStyle="black";
+                ctx.fillStyle="indigo";
                 ctx.fillText("*", i*tileSize+textOffsets.hOffsetMine, (j+1)*tileSize+textOffsets.vOffsetMine);
             }
         }
@@ -330,7 +394,21 @@ function endGame(x, y) {
 
 function winGame() {
     gameOver = true;
-    document.getElementById("gameTimer").style.color = "black";
+    outbreaksStopped += 1;
+    document.getElementById("outbreaksStopped").innerHTML = outbreaksStopped + (outbreaksStopped == 1 ? " outbreak" : " outbreaks") + " stopped";
+    document.getElementById("gameTimer").style.color = "white";
     document.getElementById("gameEmote").innerHTML = "B-)";
-    document.getElementById("gameMines").innerHTML = "0";
+    document.getElementById("gameMines").innerHTML = "0 / " + maxGameMines;
+    for (var j = 0; j < gameState.length; j++) {
+        for (var i = 0; i < gameState[j].length; i++) {
+            if (gridClicked[j][i] != tileClicked) {
+                ctx.fillStyle="grey";
+                ctx.fillRect(i*tileSize+1, j*tileSize+1, tileSize, tileSize);
+                ctx.fillStyle="aliceblue";
+                ctx.fillRect(i*tileSize+1, j*tileSize+1, tileSize-1, tileSize-1);
+                ctx.fillStyle="powderblue";
+                ctx.fillText("*", i*tileSize+textOffsets.hOffsetMine, (j+1)*tileSize+textOffsets.vOffsetMine);
+            }
+        }
+    }
 }

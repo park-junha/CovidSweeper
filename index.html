@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Minesweeper</title>
+    <title>CovidSweeper</title>
     <link rel="stylesheet" href="src/styles.css"></link>
     <script type="text/javascript" src="src/game.js"></script>
 </head>
@@ -18,12 +18,18 @@
                 <div id="gameTimer"></div>
             </div>
         </div>
+        <div>
+            <h4 id="twistLabel">Minesweeper, but with a twist...</h4>
+            <p id="tileCasualties"></p>
+            <p id="playerCasualties"></p>
+            <p id="outbreaksStopped"></p>
+        </div>
     </div>
     <div class="gameSettings" id="gameSettings">
         <ul>Difficulty
-            <li><a href="javascript:setDifficulty('beginner')">Beginner</a></li>
             <li><a href="javascript:setDifficulty('intermediate')">Intermediate</a></li>
             <li><a href="javascript:setDifficulty('advanced')">Advanced</a></li>
+            <li><a href="javascript:setDifficulty('omgwhy')">Global Pandemic</a></li>
         </ul>
         <ul>Tile Size
             <li><a href="javascript:setTextOffsets('small')">Small</a></li>
@@ -31,7 +37,7 @@
         </ul>
     </div>
     <div class="pageFooter">
-        <p>Developed by <a href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis. View source code <a href="https://github.com/park-junha/Minesweeper" target="_blank">here</a>.</p>
+        <p>Developed by <a href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis. View source code <a href="https://github.com/park-junha/CovidSweeper" target="_blank">here</a>.</p>
     </div>
 </body>
 </html>
