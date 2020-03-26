@@ -16,16 +16,16 @@ const gameSettings = {
         'maxMines': 30,
         'spreadRate': 0.15,
         'minUninfected': 12,
-        'maxInfected': 65,
+        'maxInfected': 70,
         'textSize': 'small'
     },
     'omgwhy': {
         'gridWidth': 30,
         'gridHeight': 16,
         'maxMines': 75,
-        'spreadRate': 0.20,
+        'spreadRate': 0.15,
         'minUninfected': 8,
-        'maxInfected': 150,
+        'maxInfected': 165,
         'textSize': 'small'
     }
 };
