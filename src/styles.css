@@ -2,15 +2,26 @@ body {
     font-family: "Arial";
     background-color: #181818;
     color: white;
+
+    /*  make text unselectable  */
+    webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 
-.gameSettings {
+.gameSettingsLinks {
     font-size: 20px;
+}
+
+.gameStats {
+    font-size: 16px;
 }
 
 .gameCanvas {
     float: left;
     margin-right: 8px;
+    margin-bottom: 8px;
 }
 
 .gameBar {
@@ -28,6 +39,7 @@ body {
 }
 
 .gameFooter{
+    clear: left;
     margin-bottom: 80px;
 }
 
