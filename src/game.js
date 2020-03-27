@@ -88,6 +88,7 @@ window.onload = function () {
     canv.addEventListener("click", tileClick);
     canv.addEventListener("mousedown", tileMouseDown);
     canv.addEventListener("contextmenu", tileRightClick);
+    canv.addEventListener("dblclick", tileDblClick);
 
     setInterval(gameTimer, 1000);
 
@@ -266,6 +267,37 @@ function tileRightClick (event) {
     let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
 
     markTile(x, y);
+}
+
+function tileDblClick (event) {
+    if (gameOver == true || gameStarted == false) {
+        return;
+    }
+
+    let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
+
+    document.getElementById("gameEmote").innerHTML = ":-)";
+
+    if (gridClicked[y][x] != tileClicked) {
+        return;
+    }
+
+    checkSurroundingTiles(x, y);
+}
+
+function countSurroundingTiles (x, y) {
+    count = 0;
+    for (var j = Math.max(y-1, 0); j <= Math.min(y+1, gridHeight-1); j++) {
+        for (var i = Math.max(x-1, 0); i <= Math.min(x+1, gridWidth-1); i++) {
+            switch (gridClicked[j][i]) {
+                case tileFlagged:
+                    count++;
+                    break;
+            }
+        }
+    }
+    return count;
 }
 
 function checkSurroundingTiles (x, y) {
