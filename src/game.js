@@ -16,17 +16,17 @@ const gameSettings = {
         'maxMines': 30,
         'spreadRate': 0.15,
         'minUninfected': 12,
-        'maxInfected': 65,
-        'textSize': 'small'
+        'maxInfected': 70,
+        'textSize': 'medium'
     },
     'omgwhy': {
         'gridWidth': 30,
         'gridHeight': 16,
         'maxMines': 75,
-        'spreadRate': 0.20,
+        'spreadRate': 0.15,
         'minUninfected': 8,
-        'maxInfected': 150,
-        'textSize': 'small'
+        'maxInfected': 165,
+        'textSize': 'medium'
     }
 };
 const textOffsetSettings = {
@@ -79,14 +79,15 @@ let gameOver = false;
 let timer = 0;
 
 let tileCasualties = 0;
-let playerCasualties = 0;
 let outbreaksStopped = 0;
+let selectedTextSize = defaultSize;
 
 window.onload = function () {
     canv = document.getElementById("gameController");
     canv.addEventListener("click", tileClick);
     canv.addEventListener("mousedown", tileMouseDown);
     canv.addEventListener("contextmenu", tileRightClick);
+    canv.addEventListener("dblclick", tileDblClick);
 
     setInterval(gameTimer, 1000);
 
@@ -97,6 +98,9 @@ function setTextOffsets (size) {
     if (!textOffsetSettings.hasOwnProperty(size) ) {
         size = defaultSize;
     }
+
+    selectedTextSize = size;
+
     tileSize = textOffsetSettings[size].tileSize;
     textOffsets = textOffsetSettings[size];
 
@@ -125,7 +129,7 @@ function setDifficulty (difficulty) {
     minUninfected = gameSettings[difficulty].minUninfected;
     totalTiles = gridWidth * gridHeight;
 
-    setTextOffsets(gameSettings[difficulty].textSize);
+    setTextOffsets(selectedTextSize);
 }
 
 function resetGame () {
@@ -239,8 +243,8 @@ function tileClick (event) {
         return;
     }
 
-    let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
-    let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
+    let x = Math.floor((event.pageX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.pageY - rect.top - 1) / tileSize);
 
     if (gameStarted == false){
         gameStarted = true;
@@ -258,10 +262,45 @@ function tileRightClick (event) {
         return;
     }
 
+    let x = Math.floor((event.pageX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.pageY - rect.top - 1) / tileSize);
+
+    markTile(x, y);
+}
+
+function tileDblClick (event) {
+    if (gameOver == true || gameStarted == false) {
+        return;
+    }
+
     let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
     let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
 
-    markTile(x, y);
+    document.getElementById("gameEmote").innerHTML = ":-)";
+
+    if (gridClicked[y][x] != tileClicked) {
+        return;
+    }
+
+    if (countSurroundingTiles(x, y) != gameState[y][x]) {
+        return;
+    }
+
+    checkSurroundingTiles(x, y);
+}
+
+function countSurroundingTiles (x, y) {
+    count = 0;
+    for (var j = Math.max(y-1, 0); j <= Math.min(y+1, gridHeight-1); j++) {
+        for (var i = Math.max(x-1, 0); i <= Math.min(x+1, gridWidth-1); i++) {
+            switch (gridClicked[j][i]) {
+                case tileFlagged:
+                    count++;
+                    break;
+            }
+        }
+    }
+    return count;
 }
 
 function checkSurroundingTiles (x, y) {
@@ -364,9 +403,6 @@ function endGame(x, y) {
     gameOver = true;
     document.getElementById("gameTimer").style.color = "white";
     document.getElementById("gameEmote").innerHTML = "X-(";
-
-    playerCasualties += 1;
-    document.getElementById("playerCasualties").innerHTML = playerCasualties + (playerCasualties == 1 ? " player" : " players") + " infected with COVID-19";
 
     ctx.fillStyle="purple";
     ctx.fillRect(x*tileSize+1, y*tileSize+1, tileSize, tileSize);
