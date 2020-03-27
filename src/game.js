@@ -17,7 +17,7 @@ const gameSettings = {
         'spreadRate': 0.15,
         'minUninfected': 12,
         'maxInfected': 70,
-        'textSize': 'small'
+        'textSize': 'medium'
     },
     'omgwhy': {
         'gridWidth': 30,
@@ -26,7 +26,7 @@ const gameSettings = {
         'spreadRate': 0.15,
         'minUninfected': 8,
         'maxInfected': 165,
-        'textSize': 'small'
+        'textSize': 'medium'
     }
 };
 const textOffsetSettings = {
@@ -81,6 +81,7 @@ let timer = 0;
 let tileCasualties = 0;
 let playerCasualties = 0;
 let outbreaksStopped = 0;
+let selectedTextSize = defaultSize;
 
 window.onload = function () {
     canv = document.getElementById("gameController");
@@ -97,6 +98,9 @@ function setTextOffsets (size) {
     if (!textOffsetSettings.hasOwnProperty(size) ) {
         size = defaultSize;
     }
+
+    selectedTextSize = size;
+
     tileSize = textOffsetSettings[size].tileSize;
     textOffsets = textOffsetSettings[size];
 
@@ -125,7 +129,7 @@ function setDifficulty (difficulty) {
     minUninfected = gameSettings[difficulty].minUninfected;
     totalTiles = gridWidth * gridHeight;
 
-    setTextOffsets(gameSettings[difficulty].textSize);
+    setTextOffsets(selectedTextSize);
 }
 
 function resetGame () {
