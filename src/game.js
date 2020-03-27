@@ -242,8 +242,8 @@ function tileClick (event) {
         return;
     }
 
-    let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
-    let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
+    let x = Math.floor((event.pageX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.pageY - rect.top - 1) / tileSize);
 
     if (gameStarted == false){
         gameStarted = true;
@@ -261,8 +261,8 @@ function tileRightClick (event) {
         return;
     }
 
-    let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
-    let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
+    let x = Math.floor((event.pageX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.pageY - rect.top - 1) / tileSize);
 
     markTile(x, y);
 }
