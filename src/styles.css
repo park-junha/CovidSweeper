@@ -79,3 +79,13 @@ body {
     width: 100%;
     font-size: 14px;
 }
+
+.pageFooterText {
+    margin: 12px 8px;
+    float: left;
+}
+
+.pageFooterVersion {
+    margin: 12px 8px;
+    float: right;
+}
