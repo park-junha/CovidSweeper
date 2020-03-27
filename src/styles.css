@@ -2,15 +2,26 @@ body {
     font-family: "Arial";
     background-color: #181818;
     color: white;
+
+    /*  make text unselectable  */
+    webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 
-.gameSettings {
+.gameSettingsLinks {
     font-size: 20px;
+}
+
+.gameStats {
+    font-size: 16px;
 }
 
 .gameCanvas {
     float: left;
-    margin-right: 30px;
+    margin-right: 8px;
+    margin-bottom: 8px;
 }
 
 .gameBar {
@@ -25,6 +36,11 @@ body {
     justify-content: center;
     align-items: center;
     color: white;
+}
+
+.gameFooter{
+    clear: left;
+    margin-bottom: 80px;
 }
 
 .resetButton {
@@ -57,6 +73,19 @@ body {
 
 .pageFooter {
     position: fixed;
+    background-color: #101010;
     bottom: 0;
+    left: 0;
+    width: 100%;
     font-size: 14px;
+}
+
+.pageFooterText {
+    margin: 12px 8px;
+    float: left;
+}
+
+.pageFooterVersion {
+    margin: 12px 8px;
+    float: right;
 }
