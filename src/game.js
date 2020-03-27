@@ -79,7 +79,6 @@ let gameOver = false;
 let timer = 0;
 
 let tileCasualties = 0;
-let playerCasualties = 0;
 let outbreaksStopped = 0;
 let selectedTextSize = defaultSize;
 
@@ -244,8 +243,8 @@ function tileClick (event) {
         return;
     }
 
-    let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
-    let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
+    let x = Math.floor((event.pageX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.pageY - rect.top - 1) / tileSize);
 
     if (gameStarted == false){
         gameStarted = true;
@@ -263,8 +262,8 @@ function tileRightClick (event) {
         return;
     }
 
-    let x = Math.floor((event.clientX - rect.left - 1) / tileSize);
-    let y = Math.floor((event.clientY - rect.top - 1) / tileSize);
+    let x = Math.floor((event.pageX - rect.left - 1) / tileSize);
+    let y = Math.floor((event.pageY - rect.top - 1) / tileSize);
 
     markTile(x, y);
 }
@@ -400,9 +399,6 @@ function endGame(x, y) {
     gameOver = true;
     document.getElementById("gameTimer").style.color = "white";
     document.getElementById("gameEmote").innerHTML = "X-(";
-
-    playerCasualties += 1;
-    document.getElementById("playerCasualties").innerHTML = playerCasualties + (playerCasualties == 1 ? " player" : " players") + " infected with COVID-19";
 
     ctx.fillStyle="purple";
     ctx.fillRect(x*tileSize+1, y*tileSize+1, tileSize, tileSize);
