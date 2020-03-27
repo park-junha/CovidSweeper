@@ -282,6 +282,10 @@ function tileDblClick (event) {
         return;
     }
 
+    if (countSurroundingTiles(x, y) != gameState[y][x]) {
+        return;
+    }
+
     checkSurroundingTiles(x, y);
 }
 
