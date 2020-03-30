@@ -80,6 +80,7 @@ let timer = 0;
 
 let tileCasualties = 0;
 let outbreaksStopped = 0;
+let pandemicsStopped = 0;
 let selectedTextSize = defaultSize;
 
 window.onload = function () {
@@ -430,11 +431,11 @@ function endGame(x, y) {
 
 function winGame() {
     gameOver = true;
-    outbreaksStopped += 1;
-    document.getElementById("outbreaksStopped").innerHTML = outbreaksStopped + (outbreaksStopped == 1 ? " outbreak" : " outbreaks") + " stopped";
     document.getElementById("gameTimer").style.color = "white";
     document.getElementById("gameEmote").innerHTML = "B-)";
     document.getElementById("gameMines").innerHTML = "0 / " + maxGameMines;
+
+    var minesUncovered = 0;
     for (var j = 0; j < gameState.length; j++) {
         for (var i = 0; i < gameState[j].length; i++) {
             if (gridClicked[j][i] != tileClicked) {
@@ -444,7 +445,21 @@ function winGame() {
                 ctx.fillRect(i*tileSize+1, j*tileSize+1, tileSize-1, tileSize-1);
                 ctx.fillStyle="powderblue";
                 ctx.fillText("*", i*tileSize+textOffsets.hOffsetMine, (j+1)*tileSize+textOffsets.vOffsetMine);
+                minesUncovered++;
             }
         }
+    }
+    if (minesUncovered == maxGameMines) {
+        if (maxGameMines < 75) {
+            outbreaksStopped += 1;
+            document.getElementById("outbreaksStopped").innerHTML = outbreaksStopped + (outbreaksStopped == 1 ? " outbreak" : " outbreaks") + " stopped";
+        }
+        else {
+            pandemicsStopped += 1;
+            document.getElementById("pandemicsStopped").innerHTML = pandemicsStopped + (pandemicsStopped == 1 ? " global pandemic" : " global pandemics") + " stopped";
+        }
+    }
+    else {
+        document.getElementById("twistLabel").innerHTML = "Cheater! :^(";
     }
 }
