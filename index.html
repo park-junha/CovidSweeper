@@ -1,11 +1,14 @@
-<html>
+<html ng-app="ngGame">
 <head>
   <title>CovidSweeper</title>
   <link rel="stylesheet" href="src/styles.css"></link>
   <meta property="og:title" content="CovidSweeper">
   <meta property="og:description" content="Minesweeper, but with a twist.">
   <meta property="og:url" content="img/preview.png">
-  <script type="text/javascript" src="src/game.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script type="text/javascript" src="src/app.js"></script>
+  <script type="text/javascript" src="src/controller.js"></script>
+  <script type="text/javascript" src="src/directive.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162201151-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -14,10 +17,12 @@
     gtag('config', 'UA-162201151-1');
   </script>
 </head>
-<body unselectable="on">
-  <div>
+<body unselectable="on" ng-controller="ngCtrl">
+  <div ng-covidsweeper>
     <div class="gameCanvas">
-      <canvas id="gameController"></canvas>
+      <canvas id="gameController"
+              height="{{ gameCanvasSettings.height }}"
+              width="{{ gameCanvasSettings.width }}"></canvas>
       <div class="gameBar" id="gameBar">
         <div class="gameCell">
           <div id="gameMines"></div>
@@ -26,7 +31,7 @@
           <button class="resetButton" id="gameEmote" type="button" onclick="resetGame()" ></button>
         </div>
         <div class="gameCell">
-          <div id="gameTimer"></div>
+          <div id="gameTimer" ng-bind="timer"></div>
         </div>
       </div>
     </div>
@@ -63,7 +68,7 @@
   </div>
   <div class="pageFooter">
     <div class="pageFooterText">Developed by <a id="pageFooterLink" href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis. View source code <a id="pageFooterLink" href="https://github.com/park-junha/CovidSweeper" target="_blank">here</a>.</div>
-    <div class="pageFooterVersion">Version 1.3</div>
+    <div class="pageFooterVersion">Version 2.0</div>
   </div>
 </body>
 </html>
