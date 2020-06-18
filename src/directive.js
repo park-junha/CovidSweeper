@@ -6,8 +6,14 @@ app.directive('ngGameCanvas', function(){
     scope: {
       loadedSettings: '<'
       , gameState: '<'
+      , emote: '='
     },
     link: function(scope, element){
+      elem = element;
+      canv = elem[0];
+      rect = canv.getBoundingClientRect();
+      ctx = canv.getContext('2d');
+
       function initGame() {
         scope.$watch('loadedSettings', function(newLoadedSettings) {
           if (newLoadedSettings) {
@@ -22,7 +28,8 @@ app.directive('ngGameCanvas', function(){
 
       function drawTiles() {
         scope.$watch('gameState', function(newGameState) {
-          if (newGameState) {
+          if (newGameState && newGameState.gameStarted == false) {
+            console.log('redraw');
             ctx.fillStyle='grey';
             for (var row = 0;
                  row < scope.loadedSettings.gridHeight;
@@ -42,10 +49,23 @@ app.directive('ngGameCanvas', function(){
         }, true);
       }
 
-      elem = element;
-      canv = elem[0];
-      rect = canv.getBoundingClientRect();
-      ctx = canv.getContext('2d');
+      element.bind('mousedown', function(event) {
+        console.log('down');
+        if (event.which != 1 || scope.gameOver == true) {
+          return;
+        }
+        scope.emote = ':-O';
+        scope.$apply();
+      });
+
+      element.bind('click', function(event) {
+        console.log('clickity');
+        if (scope.gameOver == true) {
+          return;
+        }
+        scope.emote = ':-)';
+        scope.$apply();
+      });
 
       initGame();
     }

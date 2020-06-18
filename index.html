@@ -23,6 +23,7 @@
       <canvas ng-game-canvas
               loaded-settings="loadedSettings"
               game-state="gameState"
+              emote="emote"
               id="gameController"
               height="{{ gameCanvasSettings.height }}"
               width="{{ gameCanvasSettings.width }}">
@@ -35,10 +36,10 @@
         </div>
         <div class="gameCell">
           <button ng-bind="emote"
+                  ng-click="resetGame()"
                   class="resetButton"
                   id="gameEmote"
-                  type="button"
-                  ng-click="resetGame()" >
+                  type="button">
           </button>
         </div>
         <div class="gameCell">
