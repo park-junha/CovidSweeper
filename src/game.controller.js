@@ -1,4 +1,4 @@
-app.directive('ngGameCanvas', ['$interval', function($interval) {
+app.directive('ngGameController', ['$interval', function($interval) {
   var canv, ctx, elem, rect, timerPromise;
 
   return {
@@ -6,6 +6,7 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
     scope: {
       loadedSettings: '<'
       , gameState: '='
+      , gameStatistics: '='
       , emote: '='
       , timer: '='
     },
@@ -45,7 +46,7 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
                                  scope.loadedSettings.gridWidth - 1);
                    i++) {
                 if (scope.gameState.gridState[j][i] !== TILE_BOMB){
-                  scope.gameState.gridState[j][i] += 1;
+                  scope.gameState.gridState[j][i]++;
                 }
               }
             }
@@ -59,13 +60,67 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
             scope.gameState.gameOver === false) {
           scope.timer++;
           if (Math.random() < scope.loadedSettings.spreadRate) {
-            //addNewMine();
+            addNewMine();
           }
         }
       }
 
       function stopTimer() {
         $interval.cancel(timerPromise);
+      }
+
+      function addNewMine() {
+        let mineX = Math.floor(Math.random() *
+                               scope.loadedSettings.gridWidth);
+        let mineY = Math.floor(Math.random() *
+                               scope.loadedSettings.gridHeight);
+        if (scope.gameState.maxMines >= scope.loadedSettings.maxInfected ||
+            scope.gameState.tilesToClick <=
+            scope.loadedSettings.minUninfected) {
+          return;
+        }
+        while (scope.gameState.gridClicked[mineY][mineX] === TILE_CLICKED ||
+               scope.gameState.gridState[mineY][mineX] === TILE_BOMB) {
+          mineX = Math.floor(Math.random() *
+                             scope.loadedSettings.gridWidth);
+          mineY = Math.floor(Math.random() *
+                             scope.loadedSettings.gridHeight);
+        }
+        scope.gameState.gridState[mineY][mineX] = TILE_BOMB;
+        scope.gameState.tilesToClick--;
+        scope.gameState.minesLeft++;
+        scope.gameState.maxMines++;
+        scope.gameStatistics.tileCasualties++;
+        for (let j = Math.max(mineY - 1, 0);
+             j <= Math.min(mineY + 1, scope.loadedSettings.gridHeight - 1);
+             j++) {
+          for (let i = Math.max(mineX - 1, 0);
+               i <= Math.min(mineX + 1, scope.loadedSettings.gridWidth - 1);
+               i++) {
+            if (scope.gameState.gridState[j][i] !== TILE_BOMB){
+              scope.gameState.gridState[j][i]++;
+              if (scope.gameState.gridClicked[j][i] === TILE_CLICKED) {
+                ctx.fillStyle='grey';
+                ctx.fillRect(i * scope.loadedSettings.tileSize + 1,
+                             j * scope.loadedSettings.tileSize + 1,
+                             scope.loadedSettings.tileSize,
+                             scope.loadedSettings.tileSize);
+                ctx.fillStyle='thistle';
+                ctx.fillRect(i * scope.loadedSettings.tileSize + 1,
+                             j * scope.loadedSettings.tileSize + 1,
+                             scope.loadedSettings.tileSize - 1,
+                             scope.loadedSettings.tileSize - 1);
+                ctx.fillStyle='indigo';
+                ctx.fillText(scope.gameState.gridState[j][i],
+                             i * scope.loadedSettings.tileSize +
+                                 scope.loadedSettings.textOffsets.hOffset,
+                             (j + 1) *
+                                 scope.loadedSettings.tileSize +
+                                 scope.loadedSettings.textOffsets.vOffset);
+              }
+            }
+          }
+        }
       }
 
       function fillTile(x, y, outerColor, innerColor) {
@@ -231,6 +286,7 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
       function endGame(x, y) {
         scope.gameState.gameOver = true;
         scope.emote = 'X-(';
+        stopTimer();
 
         ctx.fillStyle = 'purple';
         ctx.fillRect(x * scope.loadedSettings.tileSize + 1,
@@ -283,6 +339,7 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
             }
           }
         }
+        scope.$apply();
       }
 
       function winGame() {
@@ -294,7 +351,7 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
         scope.gameState.gameOver = true;
         scope.emote = 'B-)';
         scope.gameState.minesLeft = 0;
-        scope.$apply();
+        stopTimer();
 
         let minesUncovered = 0;
         for (let j = 0; j < scope.gameState.gridState.length; j++) {
@@ -322,19 +379,18 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
             }
           }
         }
-//      if (minesUncovered == maxGameMines) {
-//        if (maxGameMines < gameSettings['omgwhy']['maxMines']) {
-//          outbreaksStopped += 1;
-//          document.getElementById("outbreaksStopped").innerHTML = outbreaksStopp    ed + (outbreaksStopped == 1 ? " outbreak" : " outbreaks") + " stopped";
-//        }
-//        else {
-//          pandemicsStopped += 1;
-//          document.getElementById("pandemicsStopped").innerHTML = pandemicsStopp    ed + (pandemicsStopped == 1 ? " global pandemic" : " global pandemics") + "     stopped";
-//        }
-//      }
-//      else {
-//        document.getElementById("twistLabel").innerHTML = "Cheater! :^(";
-//      }
+        if (minesUncovered === scope.gameState.maxMines) {
+          if (scope.gameState.maxMines < N_MINES_PANDEMIC) {
+            scope.gameStatistics.outbreaks++;
+          }
+          else {
+            scope.gameStatistics.pandemics++;
+          }
+        }
+        else {
+          scope.gameStatistics.cheater = true;
+        }
+        scope.$apply();
       }
 
       element.bind('mousedown', function (event) {
@@ -386,7 +442,7 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
             scope.gameState.gameStarted === false) {
           return;
         }
-        
+
         let x = Math.floor((event.pageX - rect.left - 1) /
                            scope.loadedSettings.tileSize);
         let y = Math.floor((event.pageY - rect.top - 1) /
@@ -398,12 +454,10 @@ app.directive('ngGameCanvas', ['$interval', function($interval) {
         if (scope.gameState.gridClicked[y][x] !== TILE_CLICKED) {
           return;
         }
-        
         if (countSurroundingTiles(x, y) !==
             scope.gameState.gridState[y][x]) {
           return;
         }
-        
         checkSurroundingTiles(x, y);
       });
 

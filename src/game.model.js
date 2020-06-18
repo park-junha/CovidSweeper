@@ -1,4 +1,4 @@
-app.controller('ngCtrl', function($scope, $rootScope) {
+app.controller('ngGameModel', function($scope, $rootScope) {
   function resetGame() {
     $scope.timer = 0;
     $scope.emote = ':-)';
@@ -56,5 +56,12 @@ app.controller('ngCtrl', function($scope, $rootScope) {
   $scope.settings = {
     'textSize': $rootScope.defaultSize
     , 'difficulty': $rootScope.defaultDifficulty
+  };
+
+  $scope.gameStatistics = {
+    'tileCasualties': 0
+    , 'outbreaks': 0
+    , 'pandemics': 0
+    , 'cheated': false
   };
 });
