@@ -29,9 +29,9 @@ app.directive('ngGameController', ['$interval', function($interval) {
 
         let minesToPlace = scope.gameState.maxMines;
         while (minesToPlace > 0) {
-          mineX = Math.floor(Math.random() *
+          let mineX = Math.floor(Math.random() *
                              scope.loadedSettings.gridWidth);
-          mineY = Math.floor(Math.random() *
+          let mineY = Math.floor(Math.random() *
                              scope.loadedSettings.gridHeight);
           if (scope.gameState.gridState[mineY][mineX] !== TILE_BOMB &&
               (Math.abs(initX - mineX) > 1 ||
@@ -137,7 +137,7 @@ app.directive('ngGameController', ['$interval', function($interval) {
       }
 
       function countSurroundingTiles(x, y) {
-        count = 0;
+        let count = 0;
         for (let j = Math.max(y - 1, 0);
              j <= Math.min(y + 1, scope.loadedSettings.gridHeight - 1);
              j++) {
