@@ -10,6 +10,22 @@ body {
   user-select: none; /* Standard */
 }
 
+a {
+  text-decoration: none;
+}
+
+a:link, a:visited {
+  color: blue;
+}
+
+a:hover {
+  color: cyan;
+}
+
+a:active {
+  color: hotpink;
+}
+
 .gameSettingsLinks {
   font-size: 20px;
 }

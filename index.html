@@ -1,11 +1,15 @@
-<html>
+<html ng-app="ngGame">
 <head>
   <title>CovidSweeper</title>
   <link rel="stylesheet" href="src/styles.css"></link>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="CovidSweeper">
   <meta property="og:description" content="Minesweeper, but with a twist.">
   <meta property="og:url" content="img/preview.png">
-  <script type="text/javascript" src="src/game.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script type="text/javascript" src="src/app.js"></script>
+  <script type="text/javascript" src="src/game.model.js"></script>
+  <script type="text/javascript" src="src/game.controller.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162201151-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -14,47 +18,107 @@
     gtag('config', 'UA-162201151-1');
   </script>
 </head>
-<body unselectable="on">
+<body unselectable="on" ng-controller="ngGameModel">
   <div>
     <div class="gameCanvas">
-      <canvas id="gameController"></canvas>
+      <canvas ng-game-controller
+              loaded-settings="loadedSettings"
+              game-state="gameState"
+              game-statistics="gameStatistics"
+              emote="emote"
+              timer="timer"
+              id="gameController"
+              height="{{ gameCanvasSettings.height }}"
+              width="{{ gameCanvasSettings.width }}">
+      </canvas>
       <div class="gameBar" id="gameBar">
         <div class="gameCell">
-          <div id="gameMines"></div>
+          <div id="gameMines">
+            {{ gameState.minesLeft + ' / ' + gameState.maxMines }}
+          </div>
         </div>
         <div class="gameCell">
-          <button class="resetButton" id="gameEmote" type="button" onclick="resetGame()" ></button>
+          <button ng-bind="emote"
+                  ng-click="resetGame()"
+                  class="resetButton"
+                  id="gameEmote"
+                  type="button">
+          </button>
         </div>
         <div class="gameCell">
-          <div id="gameTimer"></div>
+          <div ng-bind="timer"
+               style="color:{{
+                        gameState.gameStarted === true &&
+                        gameState.gameOver === false ?
+                        'thistle' :
+                        'white'
+                      }}"
+               id="gameTimer">
+          </div>
         </div>
       </div>
     </div>
     <div class="gameSettings" id="gameSettings">
       <p class="gameSettingsLinks">Difficulty
         <br />
-        <a href="javascript:setDifficulty('intermediate')">Intermediate</a>
+        <a href
+           ng-click="settings.difficulty = 'intermediate'">
+          Intermediate
+        </a>
         <br />
-        <a href="javascript:setDifficulty('advanced')">Advanced</a>
+        <a href
+           ng-click="settings.difficulty = 'advanced'">
+          Advanced
+        </a>
         <br />
-        <a href="javascript:setDifficulty('omgwhy')">Global Pandemic</a>
+        <a href
+           ng-click="settings.difficulty = 'omgwhy'">
+          Global Pandemic
+        </a>
       </p>
       <p class="gameSettingsLinks">Tile Size
         <br />
-        <a href="javascript:setTextOffsets('small')">Small</a>
+        <a href ng-click="settings.textSize = 'small'">Small</a>
         <br />
-        <a href="javascript:setTextOffsets('medium')">Medium</a>
+        <a href ng-click="settings.textSize = 'medium'">Medium</a>
       </p>
       <p class="gameStats">
-        <div id="tileCasualties"></div>
-        <div id="outbreaksStopped"></div>
-        <div id="pandemicsStopped"></div>
+        <div id="tileCasualties"
+             ng-if="gameStatistics.tileCasualties > 0">
+          {{
+            gameStatistics.tileCasualties + ' tile' +
+            ( gameStatistics.tileCasualties === 1 ?
+              '' : 's') + ' infected with COVID-19'
+          }}
+        </div>
+        <div id="outbreaksStopped"
+             ng-if="gameStatistics.outbreaks > 0">
+          {{
+            gameStatistics.outbreaks + ' outbreak' +
+            ( gameStatistics.outbreaks === 1 ?
+              '' : 's') + ' stopped'
+          }}
+        </div>
+        <div id="pandemicsStopped"
+             ng-if="gameStatistics.pandemics > 0">
+          {{
+            gameStatistics.pandemics + ' global pandemic' +
+            ( gameStatistics.pandemics === 1 ?
+              '' : 's') + ' stopped'
+          }}
+        </div>
         <br />
       </p>
     </div>
   </div>
   <div class="gameFooter">
-    <h4 id="twistLabel">Minesweeper, but with a twist...</h4>
+    <h4 id="twistLabel">
+      {{
+        gameStatistics.cheated === true ?
+        'Cheater! :^(' :
+        'Minesweeper, but with a twist...'
+      }}
+    </h4>
     <p id="howToPlay">
       <b>Objective: </b> Uncover all safe tiles.<br />
       <b>To play: </b> Left-click to uncover tiles, right-click to mark tiles as unsafe (O) or unsure (?).<br />
@@ -62,8 +126,8 @@
     </p>
   </div>
   <div class="pageFooter">
-    <div class="pageFooterText">Developed by <a id="pageFooterLink" href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis. View source code <a id="pageFooterLink" href="https://github.com/park-junha/CovidSweeper" target="_blank">here</a>.</div>
-    <div class="pageFooterVersion">Version 1.3</div>
+    <div class="pageFooterText">Developed by <a class="pageFooterLink" href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis. Powered by AngularJS.</div>
+    <div class="pageFooterVersion"><a class="pageFooterLink" href="https://github.com/park-junha/CovidSweeper" target="_blank">Version 2.0</a></div>
   </div>
 </body>
 </html>
