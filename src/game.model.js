@@ -17,21 +17,21 @@ app.controller('ngGameModel', function($scope, $rootScope) {
   function loadSettings() {
     $scope.loadedSettings = {
       'gridWidth': $rootScope.gameSettings[$scope.settings.difficulty]
-                   .gridWidth
+                     .gridWidth
       , 'gridHeight': $rootScope.gameSettings[$scope.settings.difficulty]
-                      .gridHeight
+                        .gridHeight
       , 'maxMines': $rootScope.gameSettings[$scope.settings.difficulty]
-                    .maxMines
+                      .maxMines
       , 'spreadRate': $rootScope.gameSettings[$scope.settings.difficulty]
-                      .spreadRate
+                        .spreadRate
       , 'maxInfected': $rootScope.gameSettings[$scope.settings.difficulty]
-                       .maxInfected
+                         .maxInfected
       , 'minUninfected': $rootScope.gameSettings[$scope.settings.difficulty]
-                         .minUninfected
+                           .minUninfected
       , 'tileSize': $rootScope.textOffsetSettings[$scope.settings.textSize]
-                    .tileSize
+                      .tileSize
       , 'textOffsets': $rootScope
-                       .textOffsetSettings[$scope.settings.textSize]
+                         .textOffsetSettings[$scope.settings.textSize]
     };
     $scope.loadedSettings.totalTiles = $scope.loadedSettings.gridWidth *
                                        $scope.loadedSettings.gridHeight;

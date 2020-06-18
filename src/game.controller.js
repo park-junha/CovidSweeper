@@ -1,5 +1,5 @@
 app.directive('ngGameController', ['$interval', function($interval) {
-  var canv, ctx, elem, rect, timerPromise;
+  let canv, ctx, elem, rect, timerPromise;
 
   return {
     restrict: 'EA',
@@ -410,15 +410,16 @@ app.directive('ngGameController', ['$interval', function($interval) {
                             scope.loadedSettings.tileSize);
         let y = Math.floor((event.pageY - rect.top - 1) /
                             scope.loadedSettings.tileSize);
+
+        scope.emote = ':-)';
+        scope.$apply();
+
         if (scope.gameState.gameStarted === false){
           gameStarted = true;
           startGame(x, y);
         }
 
         checkTile(x, y);
-
-        scope.emote = ':-)';
-        scope.$apply();
       });
 
       element.bind('contextmenu', function (event) {

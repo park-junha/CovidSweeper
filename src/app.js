@@ -1,4 +1,4 @@
-var app = angular.module('ngGame', [])
+let app = angular.module('ngGame', [])
 .run(function($rootScope) {
   $rootScope.defaultDifficulty = 'intermediate';
   $rootScope.defaultSize = 'medium';
