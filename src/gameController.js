@@ -1,6 +1,5 @@
 app.controller('ngCtrl', function($scope, $rootScope) {
-  function resetGame () {
-    console.log('resetting game');
+  function resetGame() {
     $scope.timer = 0;
     $scope.emote = ':-)';
     $scope.gameState = {
@@ -15,7 +14,7 @@ app.controller('ngCtrl', function($scope, $rootScope) {
     };
   };
 
-  function loadSettings () {
+  function loadSettings() {
     $scope.loadedSettings = {
       'gridWidth': $rootScope.gameSettings[$scope.settings.difficulty]
                    .gridWidth
@@ -45,7 +44,7 @@ app.controller('ngCtrl', function($scope, $rootScope) {
     resetGame();
   };
 
-  $scope.$watch('settings', function(newSettings) {
+  $scope.$watch('settings', function (newSettings) {
     if (newSettings) {
       loadSettings();
     }

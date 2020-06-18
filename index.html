@@ -7,7 +7,7 @@
   <meta property="og:url" content="img/preview.png">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
   <script type="text/javascript" src="src/app.js"></script>
-  <script type="text/javascript" src="src/controller.js"></script>
+  <script type="text/javascript" src="src/gameController.js"></script>
   <script type="text/javascript" src="src/canvasController.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162201151-1"></script>
   <script>
@@ -24,6 +24,7 @@
               loaded-settings="loadedSettings"
               game-state="gameState"
               emote="emote"
+              timer="timer"
               id="gameController"
               height="{{ gameCanvasSettings.height }}"
               width="{{ gameCanvasSettings.width }}">
@@ -43,7 +44,15 @@
           </button>
         </div>
         <div class="gameCell">
-          <div id="gameTimer" ng-bind="timer"></div>
+          <div ng-bind="timer"
+               style="color:{{
+                        gameState.gameStarted === true &&
+                        gameState.gameOver === false ?
+                        'thistle' :
+                        'white'
+                      }}"
+               id="gameTimer">
+          </div>
         </div>
       </div>
     </div>
