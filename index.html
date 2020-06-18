@@ -18,17 +18,28 @@
   </script>
 </head>
 <body unselectable="on" ng-controller="ngCtrl">
-  <div ng-covidsweeper>
+  <div>
     <div class="gameCanvas">
-      <canvas id="gameController"
+      <canvas ng-game-canvas
+              loaded-settings="loadedSettings"
+              game-state="gameState"
+              id="gameController"
               height="{{ gameCanvasSettings.height }}"
-              width="{{ gameCanvasSettings.width }}"></canvas>
+              width="{{ gameCanvasSettings.width }}">
+      </canvas>
       <div class="gameBar" id="gameBar">
         <div class="gameCell">
-          <div id="gameMines"></div>
+          <div id="gameMines">
+            {{ gameState.minesLeft + ' / ' + gameState.maxMines }}
+          </div>
         </div>
         <div class="gameCell">
-          <button class="resetButton" id="gameEmote" type="button" onclick="resetGame()" ></button>
+          <button ng-bind="emote"
+                  class="resetButton"
+                  id="gameEmote"
+                  type="button"
+                  ng-click="resetGame()" >
+          </button>
         </div>
         <div class="gameCell">
           <div id="gameTimer" ng-bind="timer"></div>
@@ -38,17 +49,26 @@
     <div class="gameSettings" id="gameSettings">
       <p class="gameSettingsLinks">Difficulty
         <br />
-        <a href="javascript:setDifficulty('intermediate')">Intermediate</a>
+        <a href
+           ng-click="settings.difficulty = 'intermediate';">
+          Intermediate
+        </a>
         <br />
-        <a href="javascript:setDifficulty('advanced')">Advanced</a>
+        <a href
+           ng-click="settings.difficulty = 'advanced';">
+          Advanced
+        </a>
         <br />
-        <a href="javascript:setDifficulty('omgwhy')">Global Pandemic</a>
+        <a href
+           ng-click="settings.difficulty = 'omgwhy';">
+          Global Pandemic
+        </a>
       </p>
       <p class="gameSettingsLinks">Tile Size
         <br />
-        <a href="javascript:setTextOffsets('small')">Small</a>
+        <a href ng-click="settings.textSize = 'small';">Small</a>
         <br />
-        <a href="javascript:setTextOffsets('medium')">Medium</a>
+        <a href ng-click="settings.textSize = 'medium';">Medium</a>
       </p>
       <p class="gameStats">
         <div id="tileCasualties"></div>
