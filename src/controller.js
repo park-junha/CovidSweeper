@@ -7,6 +7,7 @@ app.controller('ngCtrl', function($scope, $rootScope) {
       'minesLeft': $scope.loadedSettings.maxMines
       , 'maxMines': $scope.loadedSettings.maxMines
       , 'gridClicked': []
+      , 'gridState': []
       , 'gameStarted': false
       , 'gameOver': false
       , 'tilesToClick': $scope.loadedSettings.totalTiles -
