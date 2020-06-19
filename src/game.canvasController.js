@@ -416,6 +416,11 @@ app.directive('ngGameController', ['$interval', function ($interval) {
         scope.emote = ':-)';
         scope.$apply();
 
+        if (x < 0 || y < 0 || x >= scope.loadedSettings.gridWidth ||
+            y >= scope.loadedSettings.gridHeight) {
+          return;
+        }
+
         if (scope.gameState.gameStarted === false){
           gameStarted = true;
           startGame(x, y);
