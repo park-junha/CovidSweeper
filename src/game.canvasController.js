@@ -1,4 +1,4 @@
-app.directive('ngGameController', ['$interval', function ($interval) {
+app.directive('ngGameCanvas', ['$interval', function ($interval) {
   let canv, ctx, elem, rect, timerPromise;
 
   return {
@@ -108,12 +108,14 @@ app.directive('ngGameController', ['$interval', function ($interval) {
                              j * scope.loadedSettings.tileSize + 1,
                              scope.loadedSettings.tileSize,
                              scope.loadedSettings.tileSize);
-                ctx.fillStyle = 'thistle';
+                ctx.fillStyle = scope.gameState.gridState[j][i] < 7 ?
+                                'thistle' : 'black';
                 ctx.fillRect(i * scope.loadedSettings.tileSize + 1,
                              j * scope.loadedSettings.tileSize + 1,
                              scope.loadedSettings.tileSize - 1,
                              scope.loadedSettings.tileSize - 1);
-                ctx.fillStyle = 'indigo';
+                ctx.fillStyle = scope.gameState.gridState[j][i] < 7 ?
+                                'indigo' : 'thistle';
                 ctx.fillText(scope.gameState.gridState[j][i],
                              i * scope.loadedSettings.tileSize +
                                  scope.loadedSettings.textOffsets.hOffset,

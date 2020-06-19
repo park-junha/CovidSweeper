@@ -1,4 +1,4 @@
-app.controller('ngGameModel', function($scope, $rootScope) {
+app.controller('gameController', function($scope, $rootScope) {
   function resetGame() {
     $scope.gameState = {
       'minesLeft': $scope.loadedSettings.maxMines
