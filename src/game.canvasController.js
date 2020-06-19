@@ -24,7 +24,7 @@ app.directive('ngGameController', ['$interval', function ($interval) {
         scope.$apply();
 
         for (let row = 0; row < scope.loadedSettings.gridHeight; row++) {
-          scope.gameState.gridState[row] = []
+          scope.gameState.gridState[row] = [];
           for (let col = 0; col < scope.loadedSettings.gridWidth; col++) {
             scope.gameState.gridState[row][col] = 0;
           }
