@@ -22,10 +22,11 @@
   <div>
     <div class="gameCanvas">
       <canvas ng-game-controller
-              loaded-settings="loadedSettings"
+              emote="emote"
               game-state="gameState"
               game-statistics="gameStatistics"
-              emote="emote"
+              loaded-settings="loadedSettings"
+              settings="settings"
               timer="timer"
               id="gameController"
               height="{{ gameCanvasSettings.height }}"
