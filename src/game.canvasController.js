@@ -1,25 +1,28 @@
-app.directive('ngGameController', ['$interval', function($interval) {
+app.directive('ngGameController', ['$interval', function ($interval) {
   let canv, ctx, elem, rect, timerPromise;
 
   return {
     restrict: 'EA',
     scope: {
       loadedSettings: '<'
+      , emote: '='
       , gameState: '='
       , gameStatistics: '='
-      , emote: '='
+      , settings: '<'
       , timer: '='
     },
-    link: function(scope, element){
+    link: function (scope, element) {
       elem = element;
       canv = elem[0];
       rect = canv.getBoundingClientRect();
       ctx = canv.getContext('2d');
 
-      function startGame (initX, initY) {
+      function startGame(initX, initY) {
         timerPromise = $interval(gameTimer, 1000);
 
         scope.gameState.gameStarted = true;
+        scope.$apply();
+
         for (let row = 0; row < scope.loadedSettings.gridHeight; row++) {
           scope.gameState.gridState[row] = []
           for (let col = 0; col < scope.loadedSettings.gridWidth; col++) {
@@ -100,17 +103,17 @@ app.directive('ngGameController', ['$interval', function($interval) {
             if (scope.gameState.gridState[j][i] !== TILE_BOMB){
               scope.gameState.gridState[j][i]++;
               if (scope.gameState.gridClicked[j][i] === TILE_CLICKED) {
-                ctx.fillStyle='grey';
+                ctx.fillStyle = 'grey';
                 ctx.fillRect(i * scope.loadedSettings.tileSize + 1,
                              j * scope.loadedSettings.tileSize + 1,
                              scope.loadedSettings.tileSize,
                              scope.loadedSettings.tileSize);
-                ctx.fillStyle='thistle';
+                ctx.fillStyle = 'thistle';
                 ctx.fillRect(i * scope.loadedSettings.tileSize + 1,
                              j * scope.loadedSettings.tileSize + 1,
                              scope.loadedSettings.tileSize - 1,
                              scope.loadedSettings.tileSize - 1);
-                ctx.fillStyle='indigo';
+                ctx.fillStyle = 'indigo';
                 ctx.fillText(scope.gameState.gridState[j][i],
                              i * scope.loadedSettings.tileSize +
                                  scope.loadedSettings.textOffsets.hOffset,
@@ -130,8 +133,8 @@ app.directive('ngGameController', ['$interval', function($interval) {
                      scope.loadedSettings.tileSize,
                      scope.loadedSettings.tileSize);
         ctx.fillStyle = innerColor;
-        ctx.fillRect(x * scope.loadedSettings.tileSize+1,
-                     y * scope.loadedSettings.tileSize+1,
+        ctx.fillRect(x * scope.loadedSettings.tileSize + 1,
+                     y * scope.loadedSettings.tileSize + 1,
                      scope.loadedSettings.tileSize - 1,
                      scope.loadedSettings.tileSize - 1);
       }
@@ -235,14 +238,13 @@ app.directive('ngGameController', ['$interval', function($interval) {
         }
       }
 
-      function markTile (x, y) {
+      function markTile(x, y) {
         if (scope.gameState.gridClicked[y][x] === TILE_CLICKED) {
           return;
         }
 
-        //  TODO: replace hardcoded 3 with global constant
         scope.gameState.gridClicked[y][x] =
-          (scope.gameState.gridClicked[y][x] + 1) % 3;
+          (scope.gameState.gridClicked[y][x] + 1) % TILE_STATES_MODULO;
       
         ctx.fillStyle = 'black';
         ctx.fillRect(x * scope.loadedSettings.tileSize + 1,
@@ -253,7 +255,7 @@ app.directive('ngGameController', ['$interval', function($interval) {
         ctx.fillRect(x * scope.loadedSettings.tileSize + 1,
                      y * scope.loadedSettings.tileSize + 1,
                      scope.loadedSettings.tileSize - 1,
-                     scope.loadedSettings.tileSize-1);
+                     scope.loadedSettings.tileSize - 1);
       
         switch (scope.gameState.gridClicked[y][x]) {
           case TILE_DEFAULT:
@@ -380,11 +382,11 @@ app.directive('ngGameController', ['$interval', function($interval) {
           }
         }
         if (minesUncovered === scope.gameState.maxMines) {
-          if (scope.gameState.maxMines < N_MINES_PANDEMIC) {
-            scope.gameStatistics.outbreaks++;
+          if (scope.settings.difficulty === 'omgwhy') {
+            scope.gameStatistics.pandemics++;
           }
           else {
-            scope.gameStatistics.pandemics++;
+            scope.gameStatistics.outbreaks++;
           }
         }
         else {
@@ -462,18 +464,19 @@ app.directive('ngGameController', ['$interval', function($interval) {
         checkSurroundingTiles(x, y);
       });
 
-      scope.$watch('loadedSettings', function(newLoadedSettings) {
+      scope.$watch('loadedSettings', function (newLoadedSettings) {
         if (newLoadedSettings) {
           ctx.font = scope.loadedSettings.tileSize + 'px Arial';
         }
       }, true);
 
-      scope.$watch('gameState', function(newGameState) {
+      scope.$watch('gameState', function (newGameState) {
         if (newGameState &&
             newGameState.gameStarted === false &&
             newGameState.gameOver === false) {
           stopTimer();
           scope.timer = 0;
+          scope.emote = ':-)';
           ctx.fillStyle = 'black';
           ctx.fillRect(0, 0, canv.width, canv.height);
           ctx.fillStyle = 'grey';
@@ -485,10 +488,10 @@ app.directive('ngGameController', ['$interval', function($interval) {
                  col < scope.loadedSettings.gridWidth;
                  col++) {
               scope.gameState.gridClicked[row][col] = TILE_DEFAULT;
-              ctx.fillRect(col * scope.loadedSettings.tileSize+1,
-                           row * scope.loadedSettings.tileSize+1,
-                           scope.loadedSettings.tileSize-1,
-                           scope.loadedSettings.tileSize-1);
+              ctx.fillRect(col * scope.loadedSettings.tileSize + 1,
+                           row * scope.loadedSettings.tileSize + 1,
+                           scope.loadedSettings.tileSize - 1,
+                           scope.loadedSettings.tileSize - 1);
             }
           }
         }

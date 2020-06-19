@@ -1,7 +1,5 @@
 app.controller('ngGameModel', function($scope, $rootScope) {
   function resetGame() {
-    $scope.timer = 0;
-    $scope.emote = ':-)';
     $scope.gameState = {
       'minesLeft': $scope.loadedSettings.maxMines
       , 'maxMines': $scope.loadedSettings.maxMines

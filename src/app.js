@@ -63,5 +63,4 @@ const TILE_FLAGGED = 1;
 const TILE_UNSURE = 2;
 const TILE_CLICKED = 3;
 
-//  TODO: replace hardcoded value
-const N_MINES_PANDEMIC = 75;
+const TILE_STATES_MODULO = 3;
