@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "3.0.0",
+  "description": "GPL-2.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "build": "node index.js"
+  },
+  "keywords": [],
+  "author": "Junha Park",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
