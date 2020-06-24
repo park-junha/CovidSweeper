@@ -1,4 +1,4 @@
-app.controller('gameController', function($scope, $rootScope) {
+app.controller('gameController', function($scope, $rootScope, $http) {
   function resetGame() {
     $scope.gameState = {
       'minesLeft': $scope.loadedSettings.maxMines
@@ -42,6 +42,30 @@ app.controller('gameController', function($scope, $rootScope) {
     resetGame();
   };
 
+  function submitScore(newHiscoreName) {
+    $http({
+      url: $rootScope.apiUrl + '/hiscores'
+      , method: 'POST'
+      , headers: {
+        'Content-Type': 'application/json'
+      }
+      , data: {
+        'time': $scope.timer
+        , 'name': newHiscoreName
+        , 'difficulty': $scope.settings.difficulty
+        , 'mines': $scope.gameState.maxMines
+      }
+    }).then(closeModal)
+    .catch((err) => {
+      $scope.failedApiAttempts++;
+    })
+  };
+
+  function closeModal() {
+    $scope.failedApiAttempts = 0;
+    $scope.newHiscore = false;
+  };
+
   $scope.$watch('settings', function (newSettings) {
     if (newSettings) {
       loadSettings();
@@ -50,6 +74,10 @@ app.controller('gameController', function($scope, $rootScope) {
 
   $scope.resetGame = resetGame;
   $scope.loadSettings = loadSettings;
+  $scope.closeModal = closeModal;
+  $scope.submitScore = submitScore;
+  $scope.newHiscore = false;
+  $scope.failedApiAttempts = 0;
 
   $scope.settings = {
     'textSize': $rootScope.defaultSize

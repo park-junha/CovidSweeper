@@ -17,6 +17,10 @@ const hiscoreSchema = new mongoose.Schema({
     type: String
     , required: true
   }
+  , mines: {
+    type: Number
+    , required: true
+  }
 });
 
 module.exports = mongoose.model('Hiscores', hiscoreSchema);

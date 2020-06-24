@@ -8,6 +8,7 @@ router.post('/', async (req, res) => {
     , name: req.body.name
     , datetime: Date.now()
     , difficulty: req.body.difficulty
+    , mines: req.body.mines
   });
 
   try {
@@ -15,7 +16,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(newHiscore);
   } catch (err) {
     res.status(400).json({ message: err.message });
-  }
+  };
 });
 
 module.exports = router;

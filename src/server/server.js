@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
+const index = require('./routes/index');
+const hiscores = require('./routes/hiscores');
+
 const app = express();
 
 if (!process.env.DB_URI) {
@@ -13,6 +17,11 @@ if (!process.env.PORT) {
   process.env.PORT = 2000;
 }
 
+if (!process.env.ORIGINS_ALLOWED) {
+  console.log('WARN: ORIGINS_ALLOWED not specified in .env, defaulting to \"\".');
+  process.env.ORIGINS_ALLOWED = '';
+}
+
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', (error) => {
@@ -21,10 +30,13 @@ db.on('error', (error) => {
 });
 db.once('open', () => console.log('Connected to database.'));
 
-app.use(express.json());
+let corsOptions = {
+  origin: process.env.ORIGINS_ALLOWED
+  , optionsSuccessStatus: 200
+};
 
-const index = require('./routes/index');
-const hiscores = require('./routes/hiscores');
+app.use(express.json());
+app.use(cors(corsOptions));
 app.use('', index);
 app.use('/hiscores', hiscores);
 

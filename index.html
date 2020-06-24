@@ -27,6 +27,7 @@
               game-state="gameState"
               game-statistics="gameStatistics"
               loaded-settings="loadedSettings"
+              new-hiscore="newHiscore"
               settings="settings"
               timer="timer"
               id="gameController"
@@ -131,5 +132,37 @@
     <div class="pageFooterText">Developed by <a class="pageFooterLink" href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis.</div>
     <div class="pageFooterVersion"><a class="pageFooterLink" href="https://github.com/park-junha/CovidSweeper" target="_blank">Version 3.0</a></div>
   </div>
+  <div ng-if="newHiscore === true"
+       id="customGameModal"
+       class="modal">
+    <div class="modal-content">
+      <h4>You Won!</h4>
+      <span>
+        <label for="newHiscoreName">Enter Your Name:</label>
+        <input ng-model="newHiscoreName"
+               type="text"
+               id="newHiscoreName">
+      </span>
+      <div class="modal-buttons">
+        <button ng-click="submitScore(newHiscoreName)"
+                id="submitScore"
+                type="button">
+          Submit Score
+        </button>
+        <button ng-click="closeModal()"
+                id="closeModal"
+                type="button">
+          Close Without Submitting
+        </button>
+      </div>
+      <p ng-if="failedApiAttempts > 0"
+         id="modal-msg">
+        Something went wrong. ({{
+          failedApiAttempts
+        }} attempt{{
+          failedApiAttempts > 1 ? 's' : ''
+        }})
+      </p>
+    </div>
 </body>
 </html>

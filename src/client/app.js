@@ -1,5 +1,6 @@
 let app = angular.module('ngGame', [])
 .run(function($rootScope) {
+  $rootScope.apiUrl = 'http://localhost:2000'
   $rootScope.defaultDifficulty = 'intermediate';
   $rootScope.defaultSize = 'medium';
   $rootScope.gameSettings = {
