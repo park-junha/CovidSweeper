@@ -24,7 +24,9 @@ db.once('open', () => console.log('Connected to database.'));
 app.use(express.json());
 
 const index = require('./routes/index');
-app.use('/', index);
+const hiscores = require('./routes/hiscores');
+app.use('', index);
+app.use('/hiscores', hiscores);
 
 app.listen(process.env.PORT, () => {
   console.log(`Started server on port ${process.env.PORT}.`);
