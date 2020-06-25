@@ -42,6 +42,30 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     resetGame();
   };
 
+  function initializeHighScores() {
+    $scope.hiscores = {}
+    for (const difficulty in $rootScope.gameSettings) {
+      $scope.hiscores[difficulty] = {}
+      $rootScope.hiscoreCategories.forEach((category) => {
+        $scope.hiscores[difficulty][category] = [];
+      });
+    }
+  };
+
+  function getHiscores(diff, category) {
+    $http({
+      url: $rootScope.apiUrl + '/hiscores/' + diff + '/' + category
+      , method: 'GET'
+    }).then((res) => {
+      res.data.forEach((row) => {
+        row.datetime = row.datetime.split('T')[0];
+      });
+      $scope.hiscores[diff][category] = res.data;
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
   function submitScore(newHiscoreName) {
     $http({
       url: $rootScope.apiUrl + '/hiscores'
@@ -58,12 +82,13 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     }).then(closeModal)
     .catch((err) => {
       $scope.failedApiAttempts++;
-    })
+    });
   };
 
   function closeModal() {
     $scope.failedApiAttempts = 0;
     $scope.newHiscore = false;
+    $scope.viewHiscores = false;
   };
 
   $scope.$watch('settings', function (newSettings) {
@@ -72,12 +97,28 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     }
   }, true);
 
+  $scope.$watch('scoresToView', function (newHiscoreViewOptions) {
+    if (newHiscoreViewOptions &&
+        $scope.hiscores[newHiscoreViewOptions.difficulty]
+        [newHiscoreViewOptions.category].length === 0) {
+      getHiscores(newHiscoreViewOptions.difficulty,
+                  newHiscoreViewOptions.category);
+    }
+  }, true);
+
   $scope.resetGame = resetGame;
   $scope.loadSettings = loadSettings;
   $scope.closeModal = closeModal;
   $scope.submitScore = submitScore;
+  $scope.getHiscores = getHiscores;
+
   $scope.newHiscore = false;
+  $scope.viewHiscores = false;
   $scope.failedApiAttempts = 0;
+  $scope.scoresToView = {
+    'difficulty': 'intermediate'
+    , 'category': 'daily'
+  };
 
   $scope.settings = {
     'textSize': $rootScope.defaultSize
@@ -90,4 +131,6 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     , 'pandemics': 0
     , 'cheated': false
   };
+
+  initializeHighScores();
 });

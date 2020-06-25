@@ -56,6 +56,12 @@ let app = angular.module('ngGame', [])
       'vOffsetX': -4
     }
   };
+  $rootScope.hiscoreCategories = [
+    'daily',
+    'weekly',
+    'monthly',
+    'alltime'
+  ];
 });
 
 const TILE_BOMB = -1;

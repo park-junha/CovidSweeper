@@ -123,11 +123,23 @@ a:active {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 60%; /* Could be more or less, depending on screen size */
+  width: 45%; /* Could be more or less, depending on screen size */
 }
 
 .modal-buttons {
   margin: 8px 0px;
+}
+
+.text-centered {
+  text-align: center;
+}
+
+.hiscores-table {
+  width: 100%;
+}
+
+.active-viewoption:link, .active-viewoption:visited {
+  color: white !important;
 }
 
 #modal-msg {
