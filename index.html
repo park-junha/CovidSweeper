@@ -236,7 +236,7 @@
         [scoresToView.category] !== 200 &&
       hiscoreFetchStatuses[scoresToView.difficulty]
         [scoresToView.category] !== 0"
-         id="modal-msg">
+         class="modal-msg">
         We couldn't fetch high scores for: {{
           scoresToView.difficulty
         }}, {{
@@ -270,7 +270,7 @@
         </button>
       </div>
       <p ng-if="failedApiAttempts > 0"
-         id="modal-msg">
+         class="modal-msg">
         Something went wrong. ({{
           failedApiAttempts
         }} attempt{{
