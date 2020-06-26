@@ -3,6 +3,7 @@ const router = express.Router();
 const Hiscore = require('../models/hiscore');
 
 const diffs = ['intermediate', 'advanced', 'omgwhy'];
+const MAX_ROWS = 5;
 
 function getTimeDiff(startDate, now) {
   const timeDiff = now - startDate;
@@ -88,11 +89,22 @@ router.get('/:diff/:category', async (req, res) => {
     .sort({
       time: 1
     })
-    .limit(5);
+    .limit(MAX_ROWS);
 
     for (let i = 0; i < hiscores.length; i++) {
       hiscores[i]._doc.timestamp =
         getTimeDiff(new Date(hiscores[i].datetime), now);
+    }
+
+    for (let i = hiscores.length; i < MAX_ROWS; i++) {
+      hiscores[i] = {
+        'time': '-'
+        , 'name': '-'
+        , 'datetime': null
+        , 'difficulty': '-'
+        , 'timestamp': '-'
+        , 'mines': '-'
+      };
     }
 
     res.status(200).json(hiscores);
