@@ -154,6 +154,6 @@ a:active {
   color: white !important;
 }
 
-#modal-msg {
+.modal-msg {
   color: red;
 }
