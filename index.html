@@ -198,7 +198,14 @@
           All-time
         </a>
       </div>
-      <table class="hiscores-table">
+      <div ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
+        [scoresToView.category] === 0"
+           class="text-centered fat-vertical-margins">
+        Loading...
+      </div>
+      <table ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
+        [scoresToView.category] === 200"
+             class="hiscores-table">
         <tr>
           <th>Name</th>
           <th>Time</th>
@@ -215,11 +222,30 @@
       </table>
       <div class="modal-buttons">
         <button ng-click="closeModal()"
-                id="closeModal"
                 type="button">
           Close
         </button>
+        <button ng-click="refreshHiscores()"
+                ng-disabled="hiscoreFetchStatuses[scoresToView.difficulty]
+                  [scoresToView.category] === 0"
+                type="button">
+          Refresh
+        </button>
       </div>
+      <p ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
+        [scoresToView.category] !== 200 &&
+      hiscoreFetchStatuses[scoresToView.difficulty]
+        [scoresToView.category] !== 0"
+         id="modal-msg">
+        We couldn't fetch high scores for: {{
+          scoresToView.difficulty
+        }}, {{
+          scoresToView.category
+        }}. (Error status code: {{
+          hiscoreFetchStatuses[scoresToView.difficulty]
+            [scoresToView.category]
+        }})
+      </p>
     </div>
   </div>
   <div ng-if="newHiscore === true"
@@ -235,12 +261,10 @@
       </span>
       <div class="modal-buttons">
         <button ng-click="submitScore(newHiscoreName)"
-                id="submitScore"
                 type="button">
           Submit Score
         </button>
         <button ng-click="closeModal()"
-                id="closeModal"
                 type="button">
           Close Without Submitting
         </button>

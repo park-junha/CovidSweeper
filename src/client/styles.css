@@ -138,6 +138,10 @@ a:active {
   text-align: center;
 }
 
+.fat-vertical-margins {
+  margin: 66px 0px;
+}
+
 .hiscores-table {
   width: 100%;
 }

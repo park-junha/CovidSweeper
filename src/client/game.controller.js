@@ -44,10 +44,13 @@ app.controller('gameController', function($scope, $rootScope, $http) {
 
   function initializeHighScores() {
     $scope.hiscores = {}
+    $scope.hiscoreFetchStatuses = {}
     for (const difficulty in $rootScope.gameSettings) {
       $scope.hiscores[difficulty] = {}
+      $scope.hiscoreFetchStatuses[difficulty] = {}
       $rootScope.hiscoreCategories.forEach((category) => {
         $scope.hiscores[difficulty][category] = [];
+        $scope.hiscoreFetchStatuses[difficulty][category] = 0;
       });
     }
   };
@@ -58,8 +61,9 @@ app.controller('gameController', function($scope, $rootScope, $http) {
       , method: 'GET'
     }).then((res) => {
       $scope.hiscores[diff][category] = res.data;
+      $scope.hiscoreFetchStatuses[diff][category] = res.status;
     }).catch((err) => {
-      console.log(err);
+      $scope.hiscoreFetchStatuses[diff][category] = err.status;
     });
   };
 
@@ -96,18 +100,25 @@ app.controller('gameController', function($scope, $rootScope, $http) {
 
   $scope.$watch('scoresToView', function (newHiscoreViewOptions) {
     if (newHiscoreViewOptions &&
-        $scope.hiscores[newHiscoreViewOptions.difficulty]
-        [newHiscoreViewOptions.category].length === 0) {
+        $scope.hiscoreFetchStatuses[newHiscoreViewOptions.difficulty]
+        [newHiscoreViewOptions.category] === 0) {
       getHiscores(newHiscoreViewOptions.difficulty,
                   newHiscoreViewOptions.category);
     }
   }, true);
 
+  function refreshHiscores() {
+    $scope.hiscoreFetchStatuses[$scope.scoresToView.difficulty]
+      [$scope.scoresToView.category] = 0;
+    getHiscores($scope.scoresToView.difficulty,
+                $scope.scoresToView.category);
+  };
+
   $scope.resetGame = resetGame;
   $scope.loadSettings = loadSettings;
   $scope.closeModal = closeModal;
   $scope.submitScore = submitScore;
-  $scope.getHiscores = getHiscores;
+  $scope.refreshHiscores = refreshHiscores;
 
   $scope.newHiscore = false;
   $scope.viewHiscores = false;
