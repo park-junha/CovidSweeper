@@ -4,4 +4,6 @@
 
 Minesweeper, but with a twist. Play [here](https://park-junha.github.io/CovidSweeper/).
 
+This app runs on the MEAN stack (MongoDB, Express, AngularJS, Node.js).
+
 Developed by Junha Park.
