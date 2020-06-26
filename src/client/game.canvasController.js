@@ -8,6 +8,7 @@ app.directive('ngGameCanvas', ['$interval', function ($interval) {
       , emote: '='
       , gameState: '='
       , gameStatistics: '='
+      , newHiscore: '='
       , settings: '<'
       , timer: '='
     },
@@ -355,6 +356,7 @@ app.directive('ngGameCanvas', ['$interval', function ($interval) {
         scope.gameState.gameOver = true;
         scope.emote = 'B-)';
         scope.gameState.minesLeft = 0;
+        scope.newHiscore = true;
         stopTimer();
 
         let minesUncovered = 0;
