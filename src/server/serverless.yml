@@ -1,0 +1,16 @@
+service: covidsweeper-backend
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 10
+  stage: dev
+  region: us-west-1
+
+functions:
+  api:
+    handler: lambda.universal
+    events:
+      - http: ANY {proxy+}
+      - http: ANY /
