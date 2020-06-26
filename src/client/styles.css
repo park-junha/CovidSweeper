@@ -123,7 +123,11 @@ a:active {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 45%; /* Could be more or less, depending on screen size */
+  width: 60%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content h4 {
+  text-align: center;
 }
 
 .modal-buttons {
@@ -136,6 +140,10 @@ a:active {
 
 .hiscores-table {
   width: 100%;
+}
+
+.hiscores-table th {
+  text-align: left;
 }
 
 .active-viewoption:link, .active-viewoption:visited {

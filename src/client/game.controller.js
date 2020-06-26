@@ -57,9 +57,6 @@ app.controller('gameController', function($scope, $rootScope, $http) {
       url: $rootScope.apiUrl + '/hiscores/' + diff + '/' + category
       , method: 'GET'
     }).then((res) => {
-      res.data.forEach((row) => {
-        row.datetime = row.datetime.split('T')[0];
-      });
       $scope.hiscores[diff][category] = res.data;
     }).catch((err) => {
       console.log(err);

@@ -4,6 +4,25 @@ const Hiscore = require('../models/hiscore');
 
 const diffs = ['intermediate', 'advanced', 'omgwhy'];
 
+function getTimeDiff(startDate, now) {
+  const timeDiff = now - startDate;
+  if (timeDiff < 1000 * 60) {
+    const num = Math.trunc(timeDiff / 1000);
+    return num + (num === 1 ? ' second ago' : ' seconds ago');
+  } else if (timeDiff < 1000 * 3600) {
+    const num = Math.trunc(timeDiff / (1000 * 60));
+    return num + (num === 1 ? ' minute ago' : ' minutes ago');
+  } else if (timeDiff < 1000 * 3600 * 24) {
+    const num = Math.trunc(timeDiff / (1000 * 3600));
+    return num + (num === 1 ? ' hour ago' : ' hours ago');
+  } else if (timeDiff < 1000 * 3600 * 24 * 7) {
+    const num = Math.trunc(timeDiff / (1000 * 3600 * 24));
+    return num === 1 ? 'yesterday' : num + ' days ago';
+  } else {
+    return startDate.split('T')[0];
+  }
+}
+
 router.post('/', async (req, res) => {
   const hiscore = new Hiscore({
     time: req.body.time
@@ -31,31 +50,21 @@ router.get('/:diff/:category', async (req, res) => {
 
   let now = new Date();
   let startDate;
-  const endDate = new Date(
-    now.getFullYear()
-    , now.getMonth()
-    , now.getDate() + 1
-  );
 
   switch (req.params.category) {
   case 'daily':
     startDate = new Date(
-      now.getFullYear()
-      , now.getMonth()
-      , now.getDate()
+      now.getTime() - (24 * 3600 * 1000)
     );
     break;
   case 'weekly':
     startDate = new Date(
-      now.getFullYear()
-      , now.getMonth()
-      , now.getDate() - now.getDay()
+      now.getTime() - (24 * 3600 * 1000 * 7)
     );
     break;
   case 'monthly':
     startDate = new Date(
-      now.getFullYear()
-      , now.getMonth()
+      now.getTime() - (24 * 3600 * 1000 * 30)
     );
     break;
   case 'alltime':
@@ -73,7 +82,7 @@ router.get('/:diff/:category', async (req, res) => {
       difficulty: req.params.diff
       , datetime: {
         '$gte': startDate
-        , '$lt': endDate
+        , '$lt': now
       }
     })
     .sort({
@@ -81,7 +90,10 @@ router.get('/:diff/:category', async (req, res) => {
     })
     .limit(5);
 
-    console.log(hiscores);
+    for (let i = 0; i < hiscores.length; i++) {
+      hiscores[i]._doc.timestamp =
+        getTimeDiff(new Date(hiscores[i].datetime), now);
+    }
 
     res.status(200).json(hiscores);
   } catch (err) {
