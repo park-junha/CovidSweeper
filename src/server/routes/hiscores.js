@@ -20,7 +20,7 @@ function getTimeDiff(startDate, now) {
     const num = Math.trunc(timeDiff / (1000 * 3600 * 24));
     return num === 1 ? 'yesterday' : num + ' days ago';
   } else {
-    return startDate.split('T')[0];
+    return startDate.toLocaleString().split(',')[0];
   }
 }
 
