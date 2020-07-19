@@ -12,18 +12,19 @@ body {
 
 a {
   text-decoration: none;
+  transition: color 0.2s;
 }
 
 a:link, a:visited {
-  color: blue;
+  color: #b19cd9;
 }
 
 a:hover {
-  color: cyan;
+  color: hotpink;
 }
 
 a:active {
-  color: hotpink;
+  color: blueviolet;
 }
 
 .gameSettingsLinks {
