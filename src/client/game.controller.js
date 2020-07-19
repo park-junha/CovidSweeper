@@ -43,14 +43,17 @@ app.controller('gameController', function($scope, $rootScope, $http) {
   };
 
   function initializeHighScores() {
-    $scope.hiscores = {}
-    $scope.hiscoreFetchStatuses = {}
+    $scope.hiscores = {};
+    $scope.hiscoreFetchStatuses = {};
+    $scope.hiscoreLastUpdates = {};
     for (const difficulty in $rootScope.gameSettings) {
-      $scope.hiscores[difficulty] = {}
-      $scope.hiscoreFetchStatuses[difficulty] = {}
+      $scope.hiscores[difficulty] = {};
+      $scope.hiscoreFetchStatuses[difficulty] = {};
+      $scope.hiscoreLastUpdates[difficulty] = {};
       $rootScope.hiscoreCategories.forEach((category) => {
         $scope.hiscores[difficulty][category] = [];
         $scope.hiscoreFetchStatuses[difficulty][category] = 0;
+        $scope.hiscoreLastUpdates[difficulty][category] = '';
       });
     }
   };
@@ -62,6 +65,8 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     }).then((res) => {
       $scope.hiscores[diff][category] = res.data;
       $scope.hiscoreFetchStatuses[diff][category] = res.status;
+      $scope.hiscoreLastUpdates[diff][category] =
+        new Date().toLocaleTimeString();
     }).catch((err) => {
       $scope.hiscoreFetchStatuses[diff][category] = err.status;
     });

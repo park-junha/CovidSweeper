@@ -233,6 +233,13 @@
                 type="button">
           Refresh
         </button>
+        <span ng-if="hiscoreLastUpdates[scoresToView.difficulty]
+                [scoresToView.category] !== ''">
+          Last Updated: {{
+            hiscoreLastUpdates[scoresToView.difficulty]
+              [scoresToView.category]
+          }}
+        </span>
       </div>
       <p ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
         [scoresToView.category] !== 200 &&
