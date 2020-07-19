@@ -1,7 +1,6 @@
 let app = angular.module('ngGame', [])
 .run(function($rootScope) {
-  $rootScope.apiUrl =
-    'https://lt6cu76ji2.execute-api.us-west-1.amazonaws.com/dev';
+  $rootScope.apiUrl = API_URL;
   $rootScope.defaultDifficulty = 'intermediate';
   $rootScope.defaultSize = 'medium';
   $rootScope.gameSettings = {
