@@ -68,12 +68,12 @@
            ng-click="settings.difficulty = 'intermediate'">
           Intermediate
         </a>
-        <br />
+        <span />&nbsp;
         <a href
            ng-click="settings.difficulty = 'advanced'">
           Advanced
         </a>
-        <br />
+        <span />&nbsp;
         <a href
            ng-click="settings.difficulty = 'omgwhy'">
           Global Pandemic
@@ -82,9 +82,9 @@
       <p class="gameSettingsLinks">Tile Size
         <br />
         <a href ng-click="settings.textSize = 'small'">Small</a>
-        <br />
+        <span />&nbsp;
         <a href ng-click="settings.textSize = 'medium'">Medium</a>
-        <br />
+        <span />&nbsp;
         <a href ng-click="settings.textSize = 'large'">Large</a>
       </p>
       <p class="gameStats">
@@ -93,7 +93,7 @@
           {{
             gameStatistics.tileCasualties + ' tile' +
             ( gameStatistics.tileCasualties === 1 ?
-              '' : 's') + ' infected with COVID-19'
+              '' : 's') + ' infected with COVID-19 this session'
           }}
         </div>
         <div id="outbreaksStopped"
