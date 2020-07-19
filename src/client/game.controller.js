@@ -58,6 +58,16 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     }
   };
 
+  function openHiscores () {
+    $scope.viewHiscores = true;
+    if (!$scope.scoresToView) {
+      $scope.scoresToView = {
+        'difficulty': 'intermediate'
+        , 'category': 'daily'
+      };
+    }
+  };
+
   function getHiscores(diff, category) {
     $http({
       url: $rootScope.apiUrl + '/hiscores/' + diff + '/' + category
@@ -127,15 +137,12 @@ app.controller('gameController', function($scope, $rootScope, $http) {
   $scope.closeModal = closeModal;
   $scope.submitScore = submitScore;
   $scope.refreshHiscores = refreshHiscores;
+  $scope.openHiscores = openHiscores;
 
   $scope.newHiscore = false;
   $scope.viewHiscores = false;
   $scope.submittingScore = false;
   $scope.failedApiAttempts = 0;
-  $scope.scoresToView = {
-    'difficulty': 'intermediate'
-    , 'category': 'daily'
-  };
 
   $scope.settings = {
     'textSize': $rootScope.defaultSize
