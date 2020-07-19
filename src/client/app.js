@@ -55,6 +55,17 @@ let app = angular.module('ngGame', [])
       'vOffsetFlag': -4,
       'hOffsetX': 6,
       'vOffsetX': -4
+    },
+    'large': {
+      'tileSize': 48,
+      'hOffset': 12,
+      'vOffset': -6,
+      'hOffsetMine': 16,
+      'vOffsetMine': 6,
+      'hOffsetFlag': 6,
+      'vOffsetFlag': -6,
+      'hOffsetX': 10,
+      'vOffsetX': -6
     }
   };
   $rootScope.hiscoreCategories = [
