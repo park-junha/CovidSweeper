@@ -121,10 +121,12 @@ a:active {
 
 .modal-content {
   background-color: #282828;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: auto;
   padding: 20px;
+  transform: translateY(50%);
   border: 1px solid #888;
-  width: 60%; /* Could be more or less, depending on screen size */
+  width: 85%;
+  max-width: 800px;
 }
 
 .modal-content h4 {
