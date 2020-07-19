@@ -68,6 +68,7 @@ app.controller('gameController', function($scope, $rootScope, $http) {
   };
 
   function submitScore(newHiscoreName) {
+    $scope.submittingScore = true;
     $http({
       url: $rootScope.apiUrl + '/hiscores'
       , method: 'POST'
@@ -82,11 +83,13 @@ app.controller('gameController', function($scope, $rootScope, $http) {
       }
     }).then(closeModal)
     .catch((err) => {
+      $scope.submittingScore = false;
       $scope.failedApiAttempts++;
     });
   };
 
   function closeModal() {
+    $scope.submittingScore = false;
     $scope.failedApiAttempts = 0;
     $scope.newHiscore = false;
     $scope.viewHiscores = false;
@@ -122,6 +125,7 @@ app.controller('gameController', function($scope, $rootScope, $http) {
 
   $scope.newHiscore = false;
   $scope.viewHiscores = false;
+  $scope.submittingScore = false;
   $scope.failedApiAttempts = 0;
   $scope.scoresToView = {
     'difficulty': 'intermediate'
