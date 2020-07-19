@@ -270,7 +270,7 @@
       </span>
       <div class="modal-buttons">
         <button ng-click="submitScore(newHiscoreName)"
-                ng-disabled="submittingScore"
+                ng-disabled="submittingScore || !newHiscoreName.length"
                 type="button">
           {{ submittingScore ? 'Submitting...' : 'Submit Score' }}
         </button>
