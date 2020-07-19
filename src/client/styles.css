@@ -154,6 +154,7 @@ a:active {
 }
 
 .active-viewoption:link, .active-viewoption:visited {
+  cursor: default;
   color: white !important;
 }
 
