@@ -7,10 +7,11 @@
   <meta property="og:title" content="CovidSweeper">
   <meta property="og:description" content="Minesweeper, but with a twist.">
   <meta property="og:url" content="img/preview.png">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+  <script type="text/javascript" src="src/client/app.config.js"></script>
   <script type="text/javascript" src="src/client/app.js"></script>
   <script type="text/javascript" src="src/client/game.controller.js"></script>
-  <script type="text/javascript" src="src/client/game.canvasController.js"></script>
+  <script type="text/javascript" src="src/client/game.directive.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162201151-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -68,12 +69,12 @@
            ng-click="settings.difficulty = 'intermediate'">
           Intermediate
         </a>
-        <br />
+        <span />&nbsp;
         <a href
            ng-click="settings.difficulty = 'advanced'">
           Advanced
         </a>
-        <br />
+        <span />&nbsp;
         <a href
            ng-click="settings.difficulty = 'omgwhy'">
           Global Pandemic
@@ -82,8 +83,10 @@
       <p class="gameSettingsLinks">Tile Size
         <br />
         <a href ng-click="settings.textSize = 'small'">Small</a>
-        <br />
+        <span />&nbsp;
         <a href ng-click="settings.textSize = 'medium'">Medium</a>
+        <span />&nbsp;
+        <a href ng-click="settings.textSize = 'large'">Large</a>
       </p>
       <p class="gameStats">
         <div id="tileCasualties"
@@ -91,7 +94,7 @@
           {{
             gameStatistics.tileCasualties + ' tile' +
             ( gameStatistics.tileCasualties === 1 ?
-              '' : 's') + ' infected with COVID-19'
+              '' : 's') + ' infected with COVID-19 this session'
           }}
         </div>
         <div id="outbreaksStopped"
@@ -128,13 +131,13 @@
       Click the wrong tile, and it's game over. Beware of the twist...
     </p>
     <a href
-       ng-click="viewHiscores = true;">
+       ng-click="openHiscores()">
       View High Scores
     </a>
   </div>
   <div class="pageFooter">
     <div class="pageFooterText">Developed by <a class="pageFooterLink" href="https://github.com/park-junha" target="_blank">Junha Park</a> during the COVID-19 crisis.</div>
-    <div class="pageFooterVersion"><a class="pageFooterLink" href="https://github.com/park-junha/CovidSweeper" target="_blank">Version 3.1</a></div>
+    <div class="pageFooterVersion"><a class="pageFooterLink" href="https://github.com/park-junha/CovidSweeper" target="_blank">Version 3.2</a></div>
   </div>
   <div ng-if="viewHiscores === true"
        id="viewHiscoresModal"
@@ -231,6 +234,13 @@
                 type="button">
           Refresh
         </button>
+        <span ng-if="hiscoreLastUpdates[scoresToView.difficulty]
+                [scoresToView.category] !== ''">
+          Last Updated: {{
+            hiscoreLastUpdates[scoresToView.difficulty]
+              [scoresToView.category]
+          }}
+        </span>
       </div>
       <p ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
         [scoresToView.category] !== 200 &&
@@ -261,8 +271,9 @@
       </span>
       <div class="modal-buttons">
         <button ng-click="submitScore(newHiscoreName)"
+                ng-disabled="submittingScore || !newHiscoreName.length"
                 type="button">
-          Submit Score
+          {{ submittingScore ? 'Submitting...' : 'Submit Score' }}
         </button>
         <button ng-click="closeModal()"
                 type="button">

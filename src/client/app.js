@@ -1,7 +1,6 @@
 let app = angular.module('ngGame', [])
 .run(function($rootScope) {
-  $rootScope.apiUrl =
-    'https://lt6cu76ji2.execute-api.us-west-1.amazonaws.com/dev';
+  $rootScope.apiUrl = API_URL;
   $rootScope.defaultDifficulty = 'intermediate';
   $rootScope.defaultSize = 'medium';
   $rootScope.gameSettings = {
@@ -55,6 +54,17 @@ let app = angular.module('ngGame', [])
       'vOffsetFlag': -4,
       'hOffsetX': 6,
       'vOffsetX': -4
+    },
+    'large': {
+      'tileSize': 48,
+      'hOffset': 12,
+      'vOffset': -6,
+      'hOffsetMine': 16,
+      'vOffsetMine': 6,
+      'hOffsetFlag': 6,
+      'vOffsetFlag': -6,
+      'hOffsetX': 10,
+      'vOffsetX': -6
     }
   };
   $rootScope.hiscoreCategories = [
