@@ -14,11 +14,11 @@
     "aws-serverless-express": "^3.3.8",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.20"
+    "mongoose": "^5.10.11"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.4",
-    "serverless": "^1.73.1"
+    "nodemon": "^2.0.6",
+    "serverless": "^1.83.0"
   }
 }
