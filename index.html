@@ -170,6 +170,14 @@
         </a>
         <br />
         <a href
+           ng-click="scoresToView.category = 'alltime';"
+           class="{{ scoresToView.category === 'alltime' ?
+                     'active-viewoption' : '' }}"
+        >
+          All-time
+        </a>
+        <span>&nbsp;</span>
+        <a href
            ng-click="scoresToView.category = 'daily';"
            class="{{ scoresToView.category === 'daily' ?
                      'active-viewoption' : '' }}"
@@ -191,14 +199,6 @@
                      'active-viewoption' : '' }}"
         >
           Monthly
-        </a>
-        <span>&nbsp;</span>
-        <a href
-           ng-click="scoresToView.category = 'alltime';"
-           class="{{ scoresToView.category === 'alltime' ?
-                     'active-viewoption' : '' }}"
-        >
-          All-time
         </a>
       </div>
       <div ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
