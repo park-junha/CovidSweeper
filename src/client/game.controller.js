@@ -63,7 +63,7 @@ app.controller('gameController', function($scope, $rootScope, $http) {
     if (!$scope.scoresToView) {
       $scope.scoresToView = {
         'difficulty': 'intermediate'
-        , 'category': 'daily'
+        , 'category': 'alltime'
       };
     }
   };

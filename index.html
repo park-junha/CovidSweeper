@@ -7,7 +7,7 @@
   <meta property="og:title" content="CovidSweeper">
   <meta property="og:description" content="Minesweeper, but with a twist.">
   <meta property="og:url" content="img/preview.png">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script type="text/javascript" src="src/client/app.config.js"></script>
   <script type="text/javascript" src="src/client/app.js"></script>
   <script type="text/javascript" src="src/client/game.controller.js"></script>
@@ -170,6 +170,14 @@
         </a>
         <br />
         <a href
+           ng-click="scoresToView.category = 'alltime';"
+           class="{{ scoresToView.category === 'alltime' ?
+                     'active-viewoption' : '' }}"
+        >
+          All-time
+        </a>
+        <span>&nbsp;</span>
+        <a href
            ng-click="scoresToView.category = 'daily';"
            class="{{ scoresToView.category === 'daily' ?
                      'active-viewoption' : '' }}"
@@ -191,14 +199,6 @@
                      'active-viewoption' : '' }}"
         >
           Monthly
-        </a>
-        <span>&nbsp;</span>
-        <a href
-           ng-click="scoresToView.category = 'alltime';"
-           class="{{ scoresToView.category === 'alltime' ?
-                     'active-viewoption' : '' }}"
-        >
-          All-time
         </a>
       </div>
       <div ng-if="hiscoreFetchStatuses[scoresToView.difficulty]
